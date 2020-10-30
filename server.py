@@ -1,5 +1,5 @@
 import socket
-import threading
+from _thread import *
 import pygame
 from pygame.locals import *
 from player import Player
@@ -11,6 +11,7 @@ import pickle
 pygame.font.init()
 
 server = socket.gethostbyname(socket.gethostname())
+print("Only give this to players you trust: " , server)
 port = 5321
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -38,9 +39,9 @@ except socket.error as e:
 
 s.listen(2)
 print("Waiting for a connection, Server Started")
-#player1 = Player(500,300)
-#player2 = Player(550,400)
-#players = [player1, player2]
+player1 = Player(500,300)
+player2 = Player(550,400)
+players = [player1, player2]
 
 def threaded_client(conn, player):
     conn.send(pickle.dumps(player))
@@ -65,6 +66,11 @@ def threaded_client(conn, player):
                 print("Sending : ", reply)
                 print("player x: ", player.x)
                 print("player y: ", player.y)
+                player1.x = player.x
+                player1.y = player.y
+                player1.oriX = player.oriX
+                player1.oriY = player.oriY
+
 
             conn.send(pickle.dumps(reply))
         except:
@@ -77,7 +83,7 @@ def acceptConnections(player):
     conn, addr = s.accept()
     print("Connected to:", addr)
 
-    threading.Thread(target=threaded_client,args= (conn, player))
+    start_new_thread(threaded_client, (conn, player))
     #currentPlayer += 1
 
 # a Round function so increasing 
@@ -102,13 +108,12 @@ def nextRound(Round, enemies):
 
 
 def gameLoop():
-    player1 = Player(500,300)
-    player2 = Player(550,400)
-    #start_new_thread(acceptConnections,(player1, ))
+    
+    start_new_thread(acceptConnections,(player1, ))
     #talk(player1)
     game = True
     #currentPlayer = 0
-    threading.Thread(target=acceptConnections, args=(player1,))
+    #threading.Thread(target=acceptConnections, args=(player1,))
     # initialize first two enemies
     #enemyO = enemy.Enemy(-50, 50)
     #enemyT = enemy.Enemy(1000, 740)
@@ -141,8 +146,8 @@ def gameLoop():
         surface.blit(scoreNum,(100,5))
         surface.blit(roundTxt,(5,55)) # Draw round
         surface.blit(roundNum,(100,55))
-        player1.draw(surface, player1.x, player1.y)
-        player2.draw(surface, player2.x, player2.y)
+        player1.draw(surface)
+        player2.draw(surface)
         pygame.display.update()
         FPS.tick(30)
 

@@ -2,8 +2,8 @@ import pygame
 from network import Network
 from player import *
 
-width = 200
-height = 200
+width = 300
+height = 300
 
 black = pygame.Color(0, 0, 0)         # Black
 white = pygame.Color(255, 255, 255)   # White
@@ -18,9 +18,10 @@ FPS = pygame.time.Clock()
     
 
 def gameLoop():
+    ip = input("Your servers IP address: ")
     game = True
-    n = Network()
-
+    n = Network(ip)
+    me = n.p
 
     while game:
         for event in pygame.event.get():
@@ -28,14 +29,15 @@ def gameLoop():
                 game = False
                 pygame.quit()
 
-        me = n.p
+        
         me.move()
         n.send(me)
+        me = n.getP()
         print("x and y: ", me.x, me.y)
 
 
         surface.fill(black)
-        me.clientDraw(surface, 100, 100)
+        me.clientDraw(surface, 150, 150)
         pygame.display.update()
         FPS.tick(30)
 
@@ -44,8 +46,5 @@ def main():
 
 if __name__=="__main__":
     main()
-
-
-
 
 

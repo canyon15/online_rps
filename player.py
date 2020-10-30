@@ -28,11 +28,19 @@ class Player():
             -1,-2,-3,-4,-5,-6,-7,-8,-8,-9,-9,-10,-11,-12,-12,-13,-13,-14,-14,-15,-15,-15,-16,-16, -16] # 77 - 100
 
     # Draw self
-    def draw(self, surface, x, y):
+    def draw(self, surface):
         #print ("x ori = ", self.oriX, "y ori = ", self.oriY)
         if self.health != 0:
+            pygame.draw.circle(surface, (255, 255, 255), (self.x, self.y), self.radius)
+            pygame.draw.line(surface, (255, 255, 255), (self.x, self.y), (self.oriX, self.oriY), 3)
+    def clientDraw(self, surface, x, y):
+        #print ("x ori = ", self.oriX, "y ori = ", self.oriY)
+        oriX = x + self.angle[(self.oxp)]
+        oriY = y + self.angle[(self.oyp)]
+        if self.health != 0:
             pygame.draw.circle(surface, (255, 255, 255), (x, y), self.radius)
-            pygame.draw.line(surface, (255, 255, 255), (x, y), (self.oriX, self.oriY), 3)
+            pygame.draw.line(surface, (255, 255, 255), (x, y), (oriX, oriY), 3)
+
 
     # turn left and right cycle OriX and OriY through
     # 100 different preset values to avoid trying to draw half a pixel
