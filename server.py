@@ -55,17 +55,8 @@ def threaded_client(conn, player):
                 print("Disconnected")
                 break
             else:
-                """
-                if player == 1:
-                    reply = players[0]
-                else:
-                    reply = players[1]
-                    """
+                
                 reply = player
-                print("Received: ", data)
-                print("Sending : ", reply)
-                print("player x: ", player.x)
-                print("player y: ", player.y)
                 player1.x = player.x
                 player1.y = player.y
                 player1.oriX = player.oriX
@@ -84,7 +75,6 @@ def acceptConnections(player):
     print("Connected to:", addr)
 
     start_new_thread(threaded_client, (conn, player))
-    #currentPlayer += 1
 
 # a Round function so increasing 
 # numbers of enemies come in waves.
@@ -110,10 +100,7 @@ def nextRound(Round, enemies):
 def gameLoop():
     
     start_new_thread(acceptConnections,(player1, ))
-    #talk(player1)
     game = True
-    #currentPlayer = 0
-    #threading.Thread(target=acceptConnections, args=(player1,))
     # initialize first two enemies
     #enemyO = enemy.Enemy(-50, 50)
     #enemyT = enemy.Enemy(1000, 740)
@@ -147,7 +134,7 @@ def gameLoop():
         surface.blit(roundTxt,(5,55)) # Draw round
         surface.blit(roundNum,(100,55))
         player1.draw(surface)
-        player2.draw(surface)
+        #player2.draw(surface)
         pygame.display.update()
         FPS.tick(30)
 
